@@ -1,0 +1,644 @@
+/* --- 1. カラーと基本設定 --- */
+:root {
+    --main-color: #001529;    /* 深い紺（ネイビー） */
+    --accent-color: #ff007f;  /* 鮮やかなネオンピンク */
+    --sub-accent: #00f2ff;    /* シアン */
+    --bg-light: #f4f7f9;
+    --white: #ffffff;
+    --text-color: #f0f0f0;    /* ダーク背景で見やすい色 */
+    --transition: all 0.4s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    background-color: var(--main-color);
+    color: var(--text-color);
+    overflow-x: hidden;
+}
+
+/* --- 2. ヘッダー --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    background: rgba(0, 21, 41, 0.9); /* 紺色半透明 */
+    backdrop-filter: blur(10px);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--white);
+    letter-spacing: 2px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    align-items: center;
+}
+
+nav ul li { margin-left: 30px; }
+
+nav ul li a {
+    text-decoration: none;
+    color: var(--white);
+    transition: var(--transition);
+}
+
+nav ul li a:hover { color: var(--accent-color); }
+
+/* --- 3. ヒーローセクション（躍動感MAX） --- */
+.hero {
+    height: 100vh;
+    background: radial-gradient(circle at center, #002b52 0%, #001529 100%);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* ヒーローテキストの改善 */
+/* ヒーローテキストを最強にする */
+.hero-text {
+    /* clamp(最小, 推奨値, 最大) でスマホからPCまで完璧なサイズに */
+    font-size: clamp(3.5rem, 12vw, 10rem); 
+    font-weight: 900;
+    line-height: 0.9;
+    text-transform: uppercase;
+    color: transparent; /* 中を透明に */
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.5); /* 繊細な白い縁取り */
+    position: relative;
+    z-index: 2;
+    animation: text-glow 4s ease-in-out infinite alternate;
+}
+
+@keyframes text-glow {
+    0%, 100% {
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+        text-shadow: none;
+    }
+    50% {
+        color: var(--white); /* 一瞬パッと塗りつぶされる */
+        -webkit-text-stroke: 1px var(--accent-color);
+        text-shadow: 0 0 20px var(--accent-color), 0 0 40px var(--accent-color);
+    }
+}
+
+/* 背景にサイバーなグリッドを追加 */
+.hero::before {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    background-image: 
+        linear-gradient(rgba(255, 0, 127, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 0, 127, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    transform: perspective(500px) rotateX(60deg);
+    animation: grid-move 10s linear infinite;
+}
+
+@keyframes grid-move {
+    from { transform: perspective(500px) rotateX(60deg) translateY(0); }
+    to { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+}
+
+/* 背景に動く光の粒子を追加 */
+.hero::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image: radial-gradient(circle, var(--accent-color) 1px, transparent 1px);
+    background-size: 100px 100px; /* 粒子の密度 */
+    opacity: 0.2;
+    animation: star-move 20s linear infinite;
+}
+
+@keyframes star-move {
+    from { transform: scale(1) translateZ(0); }
+    to { transform: scale(2) translateZ(500px); } /* 奥から迫ってくる */
+}
+
+/* --- 変更後のマウス光設定 --- */
+.cursor-light {
+    position: fixed;     /* 画面に対して固定 */
+    top: 0;
+    left: 0;
+    width: 600px; 
+    height: 600px;
+    background: radial-gradient(
+        circle, 
+        rgba(255, 0, 127, 0.5) 0%,   /* 中心を少し強く */
+        rgba(255, 0, 127, 0.2) 30%,
+        rgba(255, 0, 127, 0.05) 60%,
+        transparent 80%
+    );
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;        /* ヘッダーや他のセクションより上に */
+    mix-blend-mode: screen;
+    /* transformはJS側で制御するので、初期値は最小限に */
+    transform: translate(-50%, -50%); 
+    filter: blur(15px);
+    will-change: transform;
+    /* パルスアニメーションを追加して生命感を出す */
+    animation: light-pulse 3s infinite alternate;
+}
+
+@keyframes light-pulse {
+    0% { opacity: 0.7; scale: 1; }
+    100% { opacity: 1; scale: 1.05; }
+}
+
+/* 流れるネオンライン（ピンクの閃光） */
+.lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.line {
+    position: absolute;
+    width: 2px;
+    height: 150px;
+    background: linear-gradient(to bottom, transparent, var(--accent-color), transparent);
+    box-shadow: 0 0 15px var(--accent-color);
+    animation: drop 1.5s linear infinite;
+    opacity: 0.6;
+}
+
+/* ラインの個別設定 */
+.line:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 4s; }
+.line:nth-child(2) { left: 30%; animation-delay: 1s; animation-duration: 3s; }
+.line:nth-child(3) { left: 50%; animation-delay: 2s; animation-duration: 5s; }
+.line:nth-child(4) { left: 70%; animation-delay: 0.5s; animation-duration: 4.5s; }
+.line:nth-child(5) { left: 90%; animation-delay: 1.5s; animation-duration: 3.5s; }
+
+/* --- 4. コンテンツセクション --- */
+.section { padding: 100px 10%; }
+.container { max-width: 1200px; margin: 0 auto; }
+
+h2 {
+    font-size: 3.5rem;
+    margin-bottom: 50px;
+    color: var(--white);
+    position: relative;
+    z-index: 1;
+}
+
+/* 文字がシュッと出るアニメーション */
+.reveal-text { display: flex; overflow: hidden; }
+.reveal-text span {
+    display: inline-block;
+    transform: translateY(110%);
+    transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.reveal-text.active span { transform: translateY(0); }
+
+/* 横に流れる背景文字 */
+.side-scroll-text {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    font-size: 10rem;
+    font-weight: 900;
+    color: rgba(255, 0, 127, 0.05); /* ほんのりピンク */
+    white-space: nowrap;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* カードのデザイン（紺色ベースにピンクのアクセント） */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 40px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 0, 127, 0.1);
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 0, 127, 0.05);
+    border-color: var(--accent-color);
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(5px); /* 背景をぼかす */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 0, 127, 0.2), transparent);
+    transition: 0.5s;
+}
+
+.card:hover::after {
+    left: 100%; /* ホバーした時に光が走る */
+}
+
+/* ボタン */
+.btn-primary, .btn-recruit {
+    display: inline-block;
+    padding: 15px 40px;
+    background: var(--accent-color);
+    color: white !important;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 50px;
+    box-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
+    transition: var(--transition);
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px var(--accent-color);
+}
+
+/* --- イノベーションセクションの躍動感ギミック --- */
+.innovation-section {
+    position: relative;
+    background: #000c18; /* メインより少し暗くして奥行きを出す */
+    overflow: hidden;
+}
+
+/* 背景を走る光 */
+.flow-line {
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+    left: -100%;
+    animation: flow 4s linear infinite;
+}
+.line-1 { top: 15%; animation-delay: 0s; opacity: 0.2; }
+.line-2 { top: 45%; animation-delay: 2s; opacity: 0.1; }
+.line-3 { top: 85%; animation-delay: 1s; opacity: 0.15; }
+
+@keyframes flow {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* 3Dカードグリッド */
+.innovation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    perspective: 1000px;
+}
+
+.innovation-card {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 50px 40px;
+    border-radius: 15px;
+    border-left: 4px solid var(--accent-color);
+    position: relative;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.5s;
+    transform-style: preserve-3d;
+}
+
+.innovation-card:hover {
+    transform: rotateX(5deg) rotateY(-5deg) translateZ(20px);
+    background: rgba(255, 0, 127, 0.05);
+    border-color: var(--accent-color);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+/* カード内の数字ギミック */
+.innovation-card::before {
+    content: attr(data-number);
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 6rem;
+    font-weight: 900;
+    color: rgba(255, 0, 127, 0.03);
+    pointer-events: none;
+    transition: 0.5s;
+}
+
+.innovation-card:hover::before {
+    color: rgba(255, 0, 127, 0.08);
+    transform: translateZ(30px) scale(1.1);
+}
+
+.innovation-card h3 {
+    font-size: 1.5rem;
+    color: var(--white);
+    margin-bottom: 15px;
+}
+
+.expanding-panels {
+    display: flex;
+    gap: 20px;
+    height: 450px;
+    margin-top: 50px;
+}
+
+.panel {
+    flex: 1; /* 通常は均等 */
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.25, 1, 0.2, 1);
+    display: flex;
+    align-items: center;
+    padding: 40px;
+}
+
+/* 選択されたパネルを「ドン！」と大きくする */
+.panel.active {
+    flex: 3; /* ここを大きくする */
+    background: linear-gradient(135deg, rgba(255, 0, 127, 0.1), rgba(0, 21, 41, 0.9));
+    border-color: var(--accent-color);
+    box-shadow: 0 0 30px rgba(255, 0, 127, 0.2);
+}
+
+.panel-num {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--accent-color);
+    display: block;
+    margin-bottom: 20px;
+}
+
+.panel h3 {
+    font-size: 1.8rem;
+    white-space: nowrap; /* タイトルが折り返さないように */
+    margin-bottom: 20px;
+}
+
+/* 詳細テキストの制御 */
+.detail-content {
+    max-height: 0;
+    opacity: 0;
+    transition: 0.4s ease;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.8;
+}
+
+.panel.active .detail-content {
+    max-height: 200px;
+    opacity: 1;
+    margin-top: 20px;
+}
+
+.company-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+    position: relative;
+}
+
+.company-table tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+}
+
+/* ホバーすると行がピンクに光る */
+.company-table tr:hover {
+    background: rgba(255, 0, 127, 0.05);
+    border-bottom: 1px solid var(--accent-color);
+}
+
+.company-table th, .company-table td {
+    padding: 25px;
+    text-align: left;
+}
+
+.company-table th {
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    width: 30%;
+}
+
+#recruit {
+    background: radial-gradient(circle at center, #001b35 0%, #000c18 100%);
+    padding: 150px 10%;
+    position: relative;
+}
+
+/* 呼吸するように光るボタン */
+.btn-primary {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    padding: 20px 60px;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+    0% { box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); }
+    50% { box-shadow: 0 0 40px rgba(255, 0, 127, 0.8); }
+    100% { box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); }
+}
+
+/* ボタンの中を光が流れる */
+.btn-primary::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: 0.5s;
+}
+
+.btn-primary:hover::before {
+    left: 100%;
+}
+
+.image-track {
+    display: flex;
+    gap: 20px;
+    height: 500px;
+    margin-top: 50px;
+}
+
+.image-box {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    transition: flex 0.8s cubic-bezier(0.25, 1, 0.2, 1), filter 0.5s;
+    filter: grayscale(1) brightness(0.6) sepia(0.2) hue-rotate(180deg); /* 紺色っぽいモノクロ */
+}
+
+/* マウスを乗せた画像だけ大きく、鮮やかに！ */
+.image-box:hover {
+    flex: 3;
+    filter: grayscale(0) brightness(1);
+    box-shadow: 0 0 30px var(--accent-color);
+}
+
+.image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 画像の比率を保ったまま枠に収める */
+    transition: transform 0.8s ease;
+}
+
+.image-box:hover img {
+    transform: scale(1.1); /* 少しズームアップ */
+}
+
+/* 画像の上の文字 */
+.image-overlay {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    color: white;
+    opacity: 0;
+    transition: 0.5s;
+}
+
+.image-box:hover .image-overlay {
+    opacity: 1;
+}
+
+.image-overlay span {
+    font-weight: 900;
+    letter-spacing: 3px;
+    border-bottom: 2px solid var(--accent-color);
+}
+
+.fleet-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 60px;
+    margin-top: 50px;
+}
+
+.truck-card {
+    position: relative;
+    height: 300px;
+    cursor: pointer;
+    perspective: 1000px; /* 立体感のキモ */
+}
+
+.truck-layers {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+    transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* 初期状態：少し暗め */
+.bg-layer { opacity: 0.3; filter: blur(2px); }
+.mid-layer { opacity: 0.5; clip-path: inset(10% 10% 10% 10%); } /* 少し切り抜く */
+.top-layer { opacity: 1; clip-path: inset(20% 20% 20% 20%); } /* もっと切り抜く */
+
+/* ホバー時の動き：層がバラバラに飛び出す！ */
+.truck-card:hover .truck-layers {
+    transform: rotateY(-15deg) rotateX(10deg);
+}
+
+.truck-card:hover .bg-layer {
+    transform: translateZ(0px);
+    opacity: 0.2;
+}
+
+.truck-card:hover .mid-layer {
+    transform: translateZ(50px) translateX(20px);
+    opacity: 0.6;
+    filter: drop-shadow(0 0 15px var(--accent-color));
+}
+
+.truck-card:hover .top-layer {
+    transform: translateZ(100px) translateX(40px);
+    border: 2px solid var(--accent-color);
+}
+
+/* 情報テキスト */
+.truck-info {
+    margin-top: 20px;
+    border-left: 3px solid var(--accent-color);
+    padding-left: 15px;
+}
+
+.truck-info .tag {
+    font-size: 0.8rem;
+    color: var(--accent-color);
+    letter-spacing: 2px;
+}
+
+/* スマホ対応 */
+@media (max-width: 768px) {
+    .expanding-panels {
+        flex-direction: column;
+        height: auto;
+    }
+    .panel.active {
+        flex: none;
+        height: 300px;
+    }
+}
+
+/* --- 5. アニメーション --- */
+@keyframes drop {
+    0% { transform: translateY(-100vh); }
+    100% { transform: translateY(100vh); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+    .hero-text { font-size: 3.5rem; }
+    h2 { font-size: 2.5rem; }
+}
